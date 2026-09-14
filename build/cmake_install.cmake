@@ -1,4 +1,4 @@
-# Install script for directory: /home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder
+# Install script for directory: /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

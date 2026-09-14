@@ -193,7 +193,9 @@ int main (void) {
     while (i2c_in_progress);
 
     //Measurement time is 12ms, so 16MHz per second, meaning 16,000 Hz per ms, so 12 * 16 = 192000, round to 200000 to be safe
-    for (int i = 0; i < 200000; i++);
+    for (int i = 0; i < 200000; i++) {
+      asm volatile ("nop");
+    }
 
     //Turn on ITBUFEN because it was turned off
     I2C1->I2C_CR2 |= (1 << 10);
@@ -208,7 +210,10 @@ int main (void) {
     while (i2c_in_progress);
 
     //Pause for one second before starting again, change to 16000000 once I put this into production
-    for (int i = 0; i < 160000; i++);
+    
+    for (int i = 0; i < 16000000; i++) {
+      asm volatile ("nop");
+    }
 
   }
 }
@@ -237,7 +242,7 @@ void I2C1_EV_IRQHandler (void) {
   }
 
   // Data register is empty here
-  else if (sr1 & (1 << 1)) {
+  if (sr1 & (1 << 1)) {
     //Reset the ADDR bit
     (void)I2C1->I2C_SR1;
     (void)I2C1->I2C_SR2;
@@ -256,7 +261,7 @@ void I2C1_EV_IRQHandler (void) {
 
   //If data register is empty so TxE = 1 (because we are in transmitter mode) we write measurement command 
   //In transmitter mode, TxE
-  else if (sr1 & (1 << 7) && !readorwrite) {
+  if (sr1 & (1 << 7) && !readorwrite) {
     if (current_i2c_state == I2C_STATE_INIT_WRITE) {
       if (SGPInnitIndex < 2) {
         I2C1->I2C_DR = SGPInnitBuffer[SGPInnitIndex++];
@@ -302,33 +307,32 @@ void I2C1_EV_IRQHandler (void) {
     return;
   } 
   
-  //RxNE
-  else if ((sr1 & (1 << 6)) && readorwrite) {
+  //BTF
+  if ((sr1 & (1 << 2)) && readorwrite) {
 
     if (!i2c_in_progress) {
       return;  // already handled this transfer's completion, ignore re-entry
     }
 
     if (currDataReceptionNumber == 0) {
+      //Set ACK to low
+      I2C1->I2C_CR1 &= ~(1 << 10);
+      //Read Data N-2
       if (data_from_sensor_index < 1000) data_from_sensor[data_from_sensor_index++] = I2C1->I2C_DR;
       if (logtrace_index< 10) log_trace[logtrace_index++] = 9;
       currDataReceptionNumber++;
-    } else if (currDataReceptionNumber == 1) {
-      I2C1->I2C_CR1 &= ~(1 << 10);
-      if (data_from_sensor_index < 1000) data_from_sensor[data_from_sensor_index++] = I2C1->I2C_DR;
-      if (logtrace_index< 10) log_trace[logtrace_index++] = 10;
-      currDataReceptionNumber++;
     } else {
-      if (logtrace_index< 10) log_trace[logtrace_index++] = 11;
+      if (logtrace_index< 10) log_trace[logtrace_index++] = 10;
 
-      i2c_in_progress = 0;
-      
       //STOP the sequence
       I2C1->I2C_CR1 |= (1 << 9);
 
       if (data_from_sensor_index < 1000) data_from_sensor[data_from_sensor_index++] = I2C1->I2C_DR;
+      if (data_from_sensor_index < 1000) data_from_sensor[data_from_sensor_index++] = I2C1->I2C_DR;
       
       currDataReceptionNumber = 0;
+
+      i2c_in_progress = 0;
 
       //Turn off ITBUFEN so that TxE doesn't cause any more triggers
       I2C1->I2C_CR2 &= ~(1 << 10);

@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder
+CMAKE_SOURCE_DIR = /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder/build
+CMAKE_BINARY_DIR = /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/output.elf.dir/depend.make
@@ -70,32 +70,32 @@ include CMakeFiles/output.elf.dir/progress.make
 include CMakeFiles/output.elf.dir/flags.make
 
 CMakeFiles/output.elf.dir/startup.c.obj: CMakeFiles/output.elf.dir/flags.make
-CMakeFiles/output.elf.dir/startup.c.obj: /home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder/startup.c
+CMakeFiles/output.elf.dir/startup.c.obj: /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/startup.c
 CMakeFiles/output.elf.dir/startup.c.obj: CMakeFiles/output.elf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/output.elf.dir/startup.c.obj"
-	/usr/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/output.elf.dir/startup.c.obj -MF CMakeFiles/output.elf.dir/startup.c.obj.d -o CMakeFiles/output.elf.dir/startup.c.obj -c /home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder/startup.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/output.elf.dir/startup.c.obj"
+	/usr/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/output.elf.dir/startup.c.obj -MF CMakeFiles/output.elf.dir/startup.c.obj.d -o CMakeFiles/output.elf.dir/startup.c.obj -c /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/startup.c
 
 CMakeFiles/output.elf.dir/startup.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/output.elf.dir/startup.c.i"
-	/usr/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder/startup.c > CMakeFiles/output.elf.dir/startup.c.i
+	/usr/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/startup.c > CMakeFiles/output.elf.dir/startup.c.i
 
 CMakeFiles/output.elf.dir/startup.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/output.elf.dir/startup.c.s"
-	/usr/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder/startup.c -o CMakeFiles/output.elf.dir/startup.c.s
+	/usr/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/startup.c -o CMakeFiles/output.elf.dir/startup.c.s
 
 CMakeFiles/output.elf.dir/src/main.c.obj: CMakeFiles/output.elf.dir/flags.make
-CMakeFiles/output.elf.dir/src/main.c.obj: /home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder/src/main.c
+CMakeFiles/output.elf.dir/src/main.c.obj: /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/src/main.c
 CMakeFiles/output.elf.dir/src/main.c.obj: CMakeFiles/output.elf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/output.elf.dir/src/main.c.obj"
-	/usr/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/output.elf.dir/src/main.c.obj -MF CMakeFiles/output.elf.dir/src/main.c.obj.d -o CMakeFiles/output.elf.dir/src/main.c.obj -c /home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder/src/main.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/output.elf.dir/src/main.c.obj"
+	/usr/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/output.elf.dir/src/main.c.obj -MF CMakeFiles/output.elf.dir/src/main.c.obj.d -o CMakeFiles/output.elf.dir/src/main.c.obj -c /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/src/main.c
 
 CMakeFiles/output.elf.dir/src/main.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/output.elf.dir/src/main.c.i"
-	/usr/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder/src/main.c > CMakeFiles/output.elf.dir/src/main.c.i
+	/usr/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/src/main.c > CMakeFiles/output.elf.dir/src/main.c.i
 
 CMakeFiles/output.elf.dir/src/main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/output.elf.dir/src/main.c.s"
-	/usr/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder/src/main.c -o CMakeFiles/output.elf.dir/src/main.c.s
+	/usr/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/src/main.c -o CMakeFiles/output.elf.dir/src/main.c.s
 
 # Object files for target output.elf
 output_elf_OBJECTS = \
@@ -109,7 +109,7 @@ output.elf: CMakeFiles/output.elf.dir/startup.c.obj
 output.elf: CMakeFiles/output.elf.dir/src/main.c.obj
 output.elf: CMakeFiles/output.elf.dir/build.make
 output.elf: CMakeFiles/output.elf.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable output.elf"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable output.elf"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/output.elf.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -121,6 +121,6 @@ CMakeFiles/output.elf.dir/clean:
 .PHONY : CMakeFiles/output.elf.dir/clean
 
 CMakeFiles/output.elf.dir/depend:
-	cd /home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder /home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder /home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder/build /home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder/build /home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder/build/CMakeFiles/output.elf.dir/DependInfo.cmake "--color=$(COLOR)"
+	cd /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/build /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/build /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/build/CMakeFiles/output.elf.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/output.elf.dir/depend
 

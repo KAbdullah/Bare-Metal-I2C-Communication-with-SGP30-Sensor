@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder
+CMAKE_SOURCE_DIR = /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder/build
+CMAKE_BINARY_DIR = /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/build
 
 # Utility rule file for flash.
 
@@ -82,6 +82,6 @@ CMakeFiles/flash.dir/clean:
 .PHONY : CMakeFiles/flash.dir/clean
 
 CMakeFiles/flash.dir/depend:
-	cd /home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder /home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder /home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder/build /home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder/build /home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder/build/CMakeFiles/flash.dir/DependInfo.cmake "--color=$(COLOR)"
+	cd /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/build /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/build /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/build/CMakeFiles/flash.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/flash.dir/depend
 

@@ -8,8 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder/src/main.c" "CMakeFiles/output.elf.dir/src/main.c.obj" "gcc" "CMakeFiles/output.elf.dir/src/main.c.obj.d"
-  "/home/abdullahkhatib/Bare-Metal-Logic-Analyzer-and-Protocol-Decoder/startup.c" "CMakeFiles/output.elf.dir/startup.c.obj" "gcc" "CMakeFiles/output.elf.dir/startup.c.obj.d"
+  "/home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/src/main.c" "CMakeFiles/output.elf.dir/src/main.c.obj" "gcc" "CMakeFiles/output.elf.dir/src/main.c.obj.d"
+  "/home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/startup.c" "CMakeFiles/output.elf.dir/startup.c.obj" "gcc" "CMakeFiles/output.elf.dir/startup.c.obj.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

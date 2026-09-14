@@ -11,7 +11,7 @@ set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
 set(CMAKE_C_COMPILER arm-none-eabi-gcc)
 
-project(Bare_Metal_Logic_Analyzer_and_Protocol_Decoder VERSION 1.0 LANGUAGES C)
+project(Bare-Metal-I2C-Communication-with-SGP30-Sensor VERSION 1.0 LANGUAGES C)
 
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED true)
