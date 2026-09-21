@@ -1,19 +1,9 @@
 #include <stdint.h>
+#include "../drivers/stm32f446re.h"
+#include "../drivers/gpio.c"
+#include "../drivers/delay.c"
 
 void I2C1_EV_IRQHandler (void);
-
-typedef struct {
-  uint32_t GPIOx_MODER;
-  uint32_t GPIOx_OTYPER;
-  uint32_t GPIOx_OSPEEDR;
-  uint32_t GPIOx_PUPDR;
-  uint32_t GPIOx_IDR;
-  uint32_t GPIOx_ODR;
-  uint32_t GPIOx_BSRR;
-  uint32_t GPIOx_LCKR;
-  uint32_t GPIOx_AFRL;
-  uint32_t GPIOx_AFRH;
-} GPIO_Struct;
 
 //RCC - over here when we put the outer *, we're saying that I want to immediately start working in the memory
 // and not work with a pointer that points to a memory, so in subsequent uses of RCC, I'm working with memory 
@@ -24,8 +14,6 @@ typedef struct {
 #define RCC_AHB1ENR (*((volatile uint32_t *)(RCC + 0x30)))
 #define RCC_APB1ENR (*((volatile uint32_t *)(RCC + 0x40)))
 
-//Probably not this, because it's GPIOB, but I'll check
-#define GPIOB ((volatile GPIO_Struct *) 0x40020400)
 
 typedef struct {
   uint32_t I2C_CR1;
@@ -91,36 +79,8 @@ int main (void) {
   //Turn on GPIOB clock
   RCC_AHB1ENR |= (1 << 1);
 
-  //Configuring the GPIOB Pins 5, 6, and 7, because those are the I2C AF ones
-  //Reset the pins first to 00 each
-  GPIOB->GPIOx_MODER &= ~((3 << 12) | (3 << 14));
 
-  //Now set them to AF here
-  GPIOB->GPIOx_MODER |= ((2 << 12) | (2 << 14));
-
-  //Set to Open Drain
-  GPIOB->GPIOx_OTYPER |= (1 << 6);
-  GPIOB->GPIOx_OTYPER |= (1 << 7);
-
-  //Output speed register, control the output speed
-  //This speed doesn't matter, because the lowest it goes is 2 MHz, and the fastest I can set my I2C is 1MHz,
-  //so doesn't matter how slow the GPIO pins are at outputting data to the I2C interface
-  //Reset
-  GPIOB->GPIOx_OSPEEDR &= ~((0b11 << 12) | (0b11 << 14));
-  //Then Set
-  GPIOB->GPIOx_OSPEEDR |= ((0b00 << 12) | (0b00 << 14));
-
-
-  GPIOB->GPIOx_PUPDR &= ~((3 << 12) | (3 << 14));
-  GPIOB->GPIOx_PUPDR |= ((1 << 12) | (1 << 14));
-
-  GPIOB->GPIOx_AFRL |= ((0b0100 << 24) | (0b0100 << 28));
-
-  //Lock key write sequence
-  GPIOB->GPIOx_LCKR = (1 << 16) | (1 << 6) | (1 << 7);
-  GPIOB->GPIOx_LCKR = (0 << 16) | (1 << 6) | (1 << 7);
-  GPIOB->GPIOx_LCKR = (1 << 16) | (1 << 6) | (1 << 7);
-  (void)GPIOB->GPIOx_LCKR;
+  gpio_init(GPIOB);
 
 
   //Turn on I2C clock
@@ -170,20 +130,21 @@ int main (void) {
   i2c_in_progress = 1;
   I2C1->I2C_CR1 |= (1 << 8);
 
+  //Start condition to get into controller mode
+  // 0 means write, 1 means read
+  //Turn on ITBUFEN because it was turned off
+  I2C1->I2C_CR2 |= (1 << 10);
+  readorwrite = 0;
+
+  //Reset measurement and Init indexes
+  SGPBufferIndex = 0;
+  SGPInnitIndex = 0;
+
+  while (i2c_in_progress);
+
+  delay(10);
+
   while (1) {
-    //Start condition to get into controller mode
-    // 0 means write, 1 means read
-    //Turn on ITBUFEN because it was turned off
-    I2C1->I2C_CR2 |= (1 << 10);
-    readorwrite = 0;
-
-    //Reset measurement and Init indexes
-    SGPBufferIndex = 0;
-    SGPInnitIndex = 0;
-
-    while (i2c_in_progress);
-
-    for (int i = 0; i < 160000; i++);
 
     //Start again
     current_i2c_state = I2C_STATE_MEASURE_WRITE;
@@ -192,10 +153,8 @@ int main (void) {
 
     while (i2c_in_progress);
 
-    //Measurement time is 12ms, so 16MHz per second, meaning 16,000 Hz per ms, so 12 * 16 = 192000, round to 200000 to be safe
-    for (int i = 0; i < 200000; i++) {
-      asm volatile ("nop");
-    }
+    //Measurement time is 12ms
+    delay(12);
 
     //Turn on ITBUFEN because it was turned off
     I2C1->I2C_CR2 |= (1 << 10);
@@ -209,11 +168,8 @@ int main (void) {
 
     while (i2c_in_progress);
 
-    //Pause for one second before starting again, change to 16000000 once I put this into production
-    
-    for (int i = 0; i < 16000000; i++) {
-      asm volatile ("nop");
-    }
+    //Pause for one second before starting again
+    delay(1000);
 
   }
 }
@@ -221,7 +177,7 @@ int main (void) {
 uint8_t log_trace[100];
 uint8_t logtrace_index= 0;
 uint8_t data_from_sensor[1000];
-uint8_t data_from_sensor_index = 0;
+uint32_t data_from_sensor_index = 0;
 
 
 void I2C1_EV_IRQHandler (void) {

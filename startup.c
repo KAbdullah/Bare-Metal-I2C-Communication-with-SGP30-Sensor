@@ -1,18 +1,18 @@
 #include <stdint.h>
 
-volatile extern uint32_t _estack;
-volatile extern uint32_t _Min_Heap_Size;
-volatile extern uint32_t _Min_Stack_Size;
-volatile extern uint32_t _stext;
-volatile extern uint32_t _etext;
-volatile extern uint32_t _srodata;
-volatile extern uint32_t _erodata;
-volatile extern uint32_t _sidata;
-volatile extern uint32_t _sdata;
-volatile extern uint32_t _edata;
-volatile extern uint32_t _sbss;
-volatile extern uint32_t _ebss;
-volatile extern uint32_t _end;
+extern volatile uint32_t _estack;
+extern volatile uint32_t _Min_Heap_Size;
+extern volatile uint32_t _Min_Stack_Size;
+extern volatile uint32_t _stext;
+extern volatile uint32_t _etext;
+extern volatile uint32_t _srodata;
+extern volatile uint32_t _erodata;
+extern volatile uint32_t _sidata;
+extern volatile uint32_t _sdata;
+extern volatile uint32_t _edata;
+extern volatile uint32_t _sbss;
+extern volatile uint32_t _ebss;
+extern volatile uint32_t _end;
 
 extern int main(void);
 
