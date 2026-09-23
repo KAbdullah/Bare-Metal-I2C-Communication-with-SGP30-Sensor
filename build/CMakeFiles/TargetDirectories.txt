@@ -1,4 +1,0 @@
-/home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/build/CMakeFiles/output.elf.dir
-/home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/build/CMakeFiles/flash.dir
-/home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/build/CMakeFiles/edit_cache.dir
-/home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/build/CMakeFiles/rebuild_cache.dir
