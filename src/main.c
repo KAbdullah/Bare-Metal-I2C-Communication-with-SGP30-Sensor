@@ -8,16 +8,18 @@
 void I2C1_EV_IRQHandler (void);
 
 typedef enum {
-  I2C_STATE_INIT_WRITE,
-  I2C_STATE_MEASURE_WRITE,
-  I2C_STATE_MEASURE_READ,
+  I2C_SEND_ADDRESS_FOR_TRANSMITTING_FIRST,
+  I2C_SEND_ADDRESS_FOR_TRANSMITTING_SECOND,
+  I2C_SEND_ADDRESS_FOR_RECEIVING,
+  I2C_SEND_SGP_INITILIZATION,
+  I2C_SEND_SGP_MEASUREMENT_COMMAND,
+  I2C_RESET_ADDR_WITHOUT_DATA,
+  I2C_COMPLETE_INITILIZATION,
+  I2C_COMPLETE_MEASUREMENT_COMMAND,
+  I2C_RECEIVE_MEASUREMENT_DATA
 } i2c_state_t;
 
-static volatile i2c_state_t current_i2c_state = I2C_STATE_INIT_WRITE;
-
-//this will belong to the SGP30.c file
-static volatile uint8_t receiver = 0;
-static volatile uint8_t first_time_start = 1;
+static volatile i2c_state_t current_i2c_state = I2C_SEND_ADDRESS_FOR_TRANSMITTING_FIRST;
 
 //SGP30 measurement command 
 static uint8_t SGPCommandBuffer[] = {0x20, 0x08};
@@ -57,7 +59,6 @@ int main (void) {
     // 0 means write, 1 means read
     //Turn on ITBUFEN because it was turned off
     I2C1->CR2 |= (1 << 10);
-    receiver = 0;
 
     //Reset measurement and Init indexes
     SGPBufferIndex = 0;
@@ -66,7 +67,7 @@ int main (void) {
     while (i2c_in_progress);
 
     //Start again
-    current_i2c_state = I2C_STATE_MEASURE_WRITE;
+    current_i2c_state = I2C_SEND_ADDRESS_FOR_TRANSMITTING_SECOND;
     i2c_in_progress = 1;
     I2C1->CR1 |= (1 << 8);
 
@@ -79,8 +80,7 @@ int main (void) {
     I2C1->CR2 |= (1 << 10);
     I2C1->CR1 |= (1 << 10);
     //Send another start condition here basically to start reading data
-    current_i2c_state = I2C_STATE_MEASURE_READ;
-    receiver = 1;
+    current_i2c_state = I2C_SEND_ADDRESS_FOR_RECEIVING;
     currDataReceptionNumber = 0;
     i2c_in_progress = 1;
     I2C1->CR1 |= (1 << 8);
@@ -102,88 +102,114 @@ uint32_t data_from_sensor_index = 0;
 void I2C1_EV_IRQHandler (void) {
   volatile uint16_t sr1 = I2C1->SR1;
 
-  //I do only 1, then everything else is set to 0, so 0b0000000000000001
-  if (sr1 & (1 << 0)) {
+  if (sr1 & (1 << 0) && current_i2c_state == I2C_SEND_ADDRESS_FOR_TRANSMITTING_FIRST) {
     (void)I2C1->SR1;
     //THE SGP30 uses 7 bits addressing, so we send the address starting at bit 1 and reserve the LSB as 0 (reset) to enter transmitter mode
-    if (receiver) {
-      if (logtrace_index< 10) log_trace[logtrace_index++] = 1;
-      I2C1->DR = ((0x58 << 1) | (1 << 0));
-    } else {
-      if (logtrace_index< 10) log_trace[logtrace_index++] = 2;
-      I2C1->DR = (0x58 << 1);
-    }
+    if (logtrace_index< 10) log_trace[logtrace_index++] = 1;
+    I2C1->DR = (0x58 << 1);
+    current_i2c_state = I2C_SEND_SGP_INITILIZATION;
     return;
   }
 
-  // Data register is empty here
-  if (sr1 & (1 << 1)) {
+  if (sr1 & (1 << 0) && current_i2c_state == I2C_SEND_ADDRESS_FOR_TRANSMITTING_SECOND) {
+    (void)I2C1->SR1;
+    //THE SGP30 uses 7 bits addressing, so we send the address starting at bit 1 and reserve the LSB as 0 (reset) to enter transmitter mode
+    if (logtrace_index< 10) log_trace[logtrace_index++] = 2;
+    I2C1->DR = (0x58 << 1);
+    current_i2c_state = I2C_SEND_SGP_MEASUREMENT_COMMAND;
+    return;
+  }
+
+  if (sr1 & (1 << 0) && current_i2c_state == I2C_SEND_ADDRESS_FOR_RECEIVING) {
+    (void)I2C1->SR1;
+    //THE SGP30 uses 7 bits addressing, so we send the address starting at bit 1 and reserve the LSB as 1 (set) to enter receiver mode
+    if (logtrace_index< 10) log_trace[logtrace_index++] = 3;
+    I2C1->DR = ((0x58 << 1) | (1 << 0));
+    current_i2c_state = I2C_RESET_ADDR_WITHOUT_DATA;
+    return;
+  }
+  
+
+  if (sr1 & (1 << 1) && current_i2c_state == I2C_SEND_SGP_INITILIZATION) {
+    //Reset the ADDR bit
+    (void)I2C1->SR1;
+    (void)I2C1->SR2;
+      
+    if (logtrace_index< 10) log_trace[logtrace_index++] = 4;
+    I2C1->DR = SGPInnitBuffer[SGPInnitIndex++];
+    current_i2c_state = I2C_COMPLETE_INITILIZATION;
+
+    return;
+  }
+
+  if (sr1 & (1 << 1) && current_i2c_state == I2C_SEND_SGP_MEASUREMENT_COMMAND) {
     //Reset the ADDR bit
     (void)I2C1->SR1;
     (void)I2C1->SR2;
 
-    if (!receiver) {
-      if (first_time_start) {
-        if (logtrace_index< 10) log_trace[logtrace_index++] = 3;
-        I2C1->DR = SGPInnitBuffer[SGPInnitIndex++];
-      } else {
-        if (logtrace_index< 10) log_trace[logtrace_index++] = 4;
-        I2C1->DR = SGPCommandBuffer[SGPBufferIndex++];
-      }
-    }
+    if (logtrace_index< 10) log_trace[logtrace_index++] = 5;
+    I2C1->DR = SGPCommandBuffer[SGPBufferIndex++];
+    current_i2c_state = I2C_COMPLETE_MEASUREMENT_COMMAND;
+
     return;
   }
 
-  //If data register is empty so TxE = 1 (because we are in transmitter mode) we write measurement command 
-  //In transmitter mode, TxE
-  if (sr1 & (1 << 7) && !receiver) {
-    if (current_i2c_state == I2C_STATE_INIT_WRITE) {
-      if (SGPInnitIndex < 2) {
-        I2C1->DR = SGPInnitBuffer[SGPInnitIndex++];
-        if (logtrace_index< 10) log_trace[logtrace_index++] = 5;
+  if (sr1 & (1 << 1) && current_i2c_state == I2C_RESET_ADDR_WITHOUT_DATA) {
+    //Reset the ADDR bit
+    (void)I2C1->SR1;
+    (void)I2C1->SR2;
+
+    if (logtrace_index< 10) log_trace[logtrace_index++] = 12;
+    current_i2c_state = I2C_RECEIVE_MEASUREMENT_DATA;
+
+    return;
+  }
+
+  if (sr1 & (1 << 7) && current_i2c_state == I2C_COMPLETE_INITILIZATION) {
+    if (SGPInnitIndex < 2) {
+      I2C1->DR = SGPInnitBuffer[SGPInnitIndex++];
+      if (logtrace_index< 10) log_trace[logtrace_index++] = 6;
+    } else {
+
+      if (!i2c_in_progress) {
+        return;  // already handled this transfer's completion, ignore re-entry
+      }
+
+      if (logtrace_index< 10) log_trace[logtrace_index++] = 7;
+      //Turn off ITBUFEN so that TxE doesn't cause any more triggers
+
+      i2c_in_progress = 0;
+
+      I2C1->CR2 &= ~(1 << 10);
+      //STOP the sequence
+      I2C1->CR1 |= (1 << 9);
+    }
+
+    return;
+  } 
+
+  if (sr1 & (1 << 7) && current_i2c_state == I2C_COMPLETE_MEASUREMENT_COMMAND) {
+    if (SGPBufferIndex < 2) {
+      if (logtrace_index< 10) log_trace[logtrace_index++] = 8;
+        I2C1->DR = SGPCommandBuffer[SGPBufferIndex++];
       } else {
 
         if (!i2c_in_progress) {
           return;  // already handled this transfer's completion, ignore re-entry
         }
 
-        if (logtrace_index< 10) log_trace[logtrace_index++] = 6;
-        //Turn off ITBUFEN so that TxE doesn't cause any more triggers
+        if (logtrace_index< 10) log_trace[logtrace_index++] = 9;
 
         i2c_in_progress = 0;
 
-        first_time_start = 0;
-
-        I2C1->CR2 &= ~(1 << 10);
         //STOP the sequence
         I2C1->CR1 |= (1 << 9);
-      }
-    } else if (current_i2c_state == I2C_STATE_MEASURE_WRITE) {
-      if (SGPBufferIndex < 2) {
-        if (logtrace_index< 10) log_trace[logtrace_index++] = 7;
-          I2C1->DR = SGPCommandBuffer[SGPBufferIndex++];
-        } else {
+        //Turn off ITBUFEN so that TxE doesn't cause any more triggers
+        I2C1->CR2 &= ~(1 << 10);
+    }
+  }
 
-          if (!i2c_in_progress) {
-            return;  // already handled this transfer's completion, ignore re-entry
-          }
-
-          if (logtrace_index< 10) log_trace[logtrace_index++] = 8;
-
-          i2c_in_progress = 0;
-
-          //STOP the sequence
-          I2C1->CR1 |= (1 << 9);
-          //Turn off ITBUFEN so that TxE doesn't cause any more triggers
-          I2C1->CR2 &= ~(1 << 10);
-      }
-    } 
-
-    return;
-  } 
-  
-  //BTF
-  if ((sr1 & (1 << 2)) && receiver) {
+  if ((sr1 & (1 << 2)) && current_i2c_state == I2C_RECEIVE_MEASUREMENT_DATA) {
 
     if (!i2c_in_progress) {
       return;  // already handled this transfer's completion, ignore re-entry
@@ -194,10 +220,10 @@ void I2C1_EV_IRQHandler (void) {
       I2C1->CR1 &= ~(1 << 10);
       //Read Data N-2
       if (data_from_sensor_index < 1000) data_from_sensor[data_from_sensor_index++] = I2C1->DR;
-      if (logtrace_index< 10) log_trace[logtrace_index++] = 9;
+      if (logtrace_index< 10) log_trace[logtrace_index++] = 10;
       currDataReceptionNumber++;
     } else {
-      if (logtrace_index< 10) log_trace[logtrace_index++] = 10;
+      if (logtrace_index< 10) log_trace[logtrace_index++] = 11;
 
       //STOP the sequence
       I2C1->CR1 |= (1 << 9);

@@ -1,0 +1,1 @@
+/usr/bin/arm-none-eabi-gcc -nostdlib -T /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/linker.ld CMakeFiles/output.elf.dir/startup.c.obj CMakeFiles/output.elf.dir/src/main.c.obj -o output.elf 
