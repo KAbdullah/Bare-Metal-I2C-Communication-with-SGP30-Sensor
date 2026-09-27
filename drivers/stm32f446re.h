@@ -30,6 +30,16 @@ typedef struct {
   uint32_t FLTR;
 } I2C_Struct;
 
+typedef struct {
+  uint32_t SR;
+  uint32_t DR;
+  uint32_t BRR;
+  uint32_t CR1;
+  uint32_t CR2;
+  uint32_t CR3;
+  uint32_t GTPR;
+} UART_Struct;
+
 
 #define GPIOA ((volatile GPIO_Struct *) 0x40020000)
 #define GPIOB ((volatile GPIO_Struct *) 0x40020400)
@@ -41,5 +51,8 @@ typedef struct {
 #define GPIOH ((volatile GPIO_Struct *) 0x40021C00)
 
 #define I2C1 ((volatile I2C_Struct *) 0x40005400)
+
+#define UART4 ((volatile UART_Struct *) 0x40004C00)
+#define UART5 ((volatile UART_Struct *) 0x40005000)
 
 #endif

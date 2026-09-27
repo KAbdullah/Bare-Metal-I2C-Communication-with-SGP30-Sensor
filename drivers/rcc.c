@@ -31,6 +31,12 @@ void init_rcc_hsi(void) {
   
 }
 
+void turn_on_gpioa(void) {
+  //Turn on GPIOB clock
+  RCC_AHB1ENR |= (1 << 0);
+}
+
+
 void turn_on_gpiob(void) {
   //Turn on GPIOB clock
   RCC_AHB1ENR |= (1 << 1);
@@ -39,4 +45,9 @@ void turn_on_gpiob(void) {
 void turn_on_i2c1(void) {
   //Turn on I2C clock
   RCC_APB1ENR |= (1 << 21);
+}
+
+void turn_on_uart4(void) {
+  //Turn on UART4 clk
+  RCC_APB1ENR |= (1 << 19);
 }

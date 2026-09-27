@@ -1,49 +1,38 @@
 #include "stm32f446re.h"
+#include "gpio_configs.c"
 
-typedef enum {
-  input,
-  general,
-  alternative,
-  analog
-} moder_states;
+void gpio_init(GPIO_Types type) {
 
-typedef enum {
-  low,
-  medium,
-  fast,
-  high
-} ospeedr_speeds;
+  GPIO_Config gpio = type.Configure_GPIO;
 
-typedef enum {
-  nopull,
-  pullup,
-  pulldown,
-  reserved
-} pupdr_configuration;
-
-void gpio_init(volatile GPIO_Struct * gpio_address) {
-  //Configuring the GPIOB Pins 5 and 6, because those are the I2C AF ones
-  gpio_address->MODER |= ((2 << 12) | (2 << 14));
+  //Configuring the GPIOB Pins 6 and 7, because those are the I2C AF ones
+  (gpio.address)->MODER &= ~((3 << (gpio.pin1 * 2)) | (3 << (gpio.pin2 * 2)));
+  (gpio.address)->MODER |= ((gpio.moder << (gpio.pin1 * 2)) | (gpio.moder << (gpio.pin2 *2)));
 
   //Set to Open Drain
-  gpio_address->OTYPER |= (1 << 6);
-  gpio_address->OTYPER |= (1 << 7);
+  (gpio.address)->OTYPER &= ~((1 << gpio.pin1) | (1 << gpio.pin2));
+  (gpio.address)->OTYPER |= (gpio.otyper << gpio.pin1);
+  //UART4 is on GPIOA, and RX is input only so it doesn't get PMOS and NMOS (push-pull) functionality
+  if (gpio.address != GPIOA) {
+    (gpio.address)->OTYPER |= (gpio.otyper << gpio.pin2);
+  }
 
   //Set speed of tranmission of the GPIO
-  gpio_address->OSPEEDR &= ~((0b11 << 12) | (0b11 << 14));
-  gpio_address->OSPEEDR |= ((0b00 << 12) | (0b00 << 14));
+  (gpio.address)->OSPEEDR &= ~((0b11 << (gpio.pin1 * 2)) | (0b11 << (gpio.pin2 *2)));
+  (gpio.address)->OSPEEDR |= ((gpio.ospeedr << (gpio.pin1 * 2)) | (gpio.ospeedr << (gpio.pin2 *2)));
 
   //Set the voltage driving force
-  gpio_address->PUPDR &= ~((3 << 12) | (3 << 14));
-  gpio_address->PUPDR |= ((1 << 12) | (1 << 14));
+  (gpio.address)->PUPDR &= ~((3 << (gpio.pin1 * 2)) | (3 << (gpio.pin2 *2)));
+  (gpio.address)->PUPDR |= (((gpio.address != GPIOA) ? (gpio.pupdr << (gpio.pin1 * 2)) : 0) | (gpio.pupdr << (gpio.pin2 *2)));
 
   //Which pins to set as alternative functions
-  gpio_address->AFRL |= ((0b0100 << 24) | (0b0100 << 28));
+  (gpio.address)->AFRL &= ~((15 << (gpio.pin1 * 4)) | (15 << (gpio.pin2 * 4)));
+  (gpio.address)->AFRL |= ((gpio.afrl << (gpio.pin1 * 4)) | (gpio.afrl << (gpio.pin2 * 4)));
 
   //Sequence to lock the configuration
-  gpio_address->LCKR = (1 << 16) | (1 << 6) | (1 << 7);
-  gpio_address->LCKR = (0 << 16) | (1 << 6) | (1 << 7);
-  gpio_address->LCKR = (1 << 16) | (1 << 6) | (1 << 7);
-  (void)gpio_address->LCKR;
+  (gpio.address)->LCKR = (1 << 16) | (1 << gpio.pin1) | (1 << gpio.pin2);
+  (gpio.address)->LCKR = (0 << 16) | (1 << gpio.pin1) | (1 << gpio.pin2);
+  (gpio.address)->LCKR = (1 << 16) | (1 << gpio.pin1) | (1 << gpio.pin2);
+  (void)(gpio.address)->LCKR;
 
 }

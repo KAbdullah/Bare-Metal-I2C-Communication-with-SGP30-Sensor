@@ -4,6 +4,7 @@
 #include "../drivers/delay.c"
 #include "../drivers/rcc.c"
 #include "../drivers/i2c.c"
+#include "../drivers/gpio_configs.c"
 
 void I2C1_EV_IRQHandler (void);
 
@@ -36,12 +37,15 @@ int main (void) {
   init_rcc_hsi();
 
   turn_on_gpiob();
+  turn_on_gpioa();
 
-  gpio_init(GPIOB);
+  gpio_init(UsingI2C1);
+  gpio_init(UsingUART4);
 
   turn_on_i2c1();
 
   i2c_init_and_start(I2C1);
+
 
   __asm("CPSIE i"); // Change Processor State to enable interrupt 
   //0xE000E100 is the NVIC base address 

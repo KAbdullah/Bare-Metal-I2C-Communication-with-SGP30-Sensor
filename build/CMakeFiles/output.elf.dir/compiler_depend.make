@@ -4,6 +4,7 @@
 CMakeFiles/output.elf.dir/src/main.c.obj: /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/src/main.c \
   /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/drivers/delay.c \
   /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/drivers/gpio.c \
+  /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/drivers/gpio_configs.c \
   /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/drivers/i2c.c \
   /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/drivers/rcc.c \
   /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/drivers/stm32f446re.h \
@@ -22,6 +23,8 @@ CMakeFiles/output.elf.dir/startup.c.obj: /home/abdullahkhatib/Bare-Metal-I2C-Com
 /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/drivers/rcc.c:
 
 /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/drivers/i2c.c:
+
+/home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/drivers/gpio_configs.c:
 
 /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/drivers/gpio.c:
 
