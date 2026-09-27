@@ -5,6 +5,7 @@
 #include "../drivers/rcc.c"
 #include "../drivers/i2c.c"
 #include "../drivers/gpio_configs.c"
+#include "../drivers/uart.c"
 
 void I2C1_EV_IRQHandler (void);
 
@@ -43,13 +44,16 @@ int main (void) {
   gpio_init(UsingUART4);
 
   turn_on_i2c1();
+  turn_on_uart4();
 
   i2c_init_and_start(I2C1);
+  uart_general_init(UART4);
 
 
   __asm("CPSIE i"); // Change Processor State to enable interrupt 
   //0xE000E100 is the NVIC base address 
   *((volatile uint32_t *)0xE000E100) |= (1 << 31); //I2C interrupt is number 31, so enable it to 1.
+  *((volatile uint32_t *)0xE000E104) |= (1 << 20); //UART interrupt is number 12, so enable it to 1.
 
   //Start condition to initialize the SGP30
   i2c_in_progress = 1;
@@ -223,7 +227,7 @@ void I2C1_EV_IRQHandler (void) {
       //Set ACK to low
       I2C1->CR1 &= ~(1 << 10);
       //Read Data N-2
-      if (data_from_sensor_index < 1000) data_from_sensor[data_from_sensor_index++] = I2C1->DR;
+      UART4->DR = I2C1->DR;
       if (logtrace_index< 10) log_trace[logtrace_index++] = 10;
       currDataReceptionNumber++;
     } else {
@@ -232,8 +236,9 @@ void I2C1_EV_IRQHandler (void) {
       //STOP the sequence
       I2C1->CR1 |= (1 << 9);
 
-      if (data_from_sensor_index < 1000) data_from_sensor[data_from_sensor_index++] = I2C1->DR;
-      if (data_from_sensor_index < 1000) data_from_sensor[data_from_sensor_index++] = I2C1->DR;
+      //Pass the data to the UART - hmm, thinking about it, I definitely need a ring buffer
+      UART4->DR= I2C1->DR;
+      UART4->DR = I2C1->DR;
       
       currDataReceptionNumber = 0;
 
