@@ -8,6 +8,7 @@ CMakeFiles/output.elf.dir/src/main.c.obj: /home/abdullahkhatib/Bare-Metal-I2C-Co
   /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/drivers/i2c.c \
   /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/drivers/rcc.c \
   /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/drivers/stm32f446re.h \
+  /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/drivers/uart.c \
   /usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h
 
 CMakeFiles/output.elf.dir/startup.c.obj: /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/startup.c \
@@ -17,6 +18,8 @@ CMakeFiles/output.elf.dir/startup.c.obj: /home/abdullahkhatib/Bare-Metal-I2C-Com
 /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/startup.c:
 
 /usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h:
+
+/home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/drivers/uart.c:
 
 /home/abdullahkhatib/Bare-Metal-I2C-Communication-with-SGP30-Sensor/drivers/stm32f446re.h:
 

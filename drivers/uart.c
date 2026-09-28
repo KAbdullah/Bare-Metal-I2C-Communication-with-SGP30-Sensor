@@ -1,6 +1,12 @@
 #include <stdint.h>
 #include "stm32f446re.h"
 
+typedef enum {
+  IDLE,
+  RECEIVING_DATA,
+  DATA_RECEPTION_COMPLETE
+} uart_states_t;
+
 void uart_general_init(volatile UART_Struct * uartaddress) {
   //Enable UART UE bit 
   uartaddress->CR1 |= (1 << 13);
@@ -19,9 +25,10 @@ void uart_general_init(volatile UART_Struct * uartaddress) {
   uartaddress->BRR = (8 << 4) | (11 << 0); 
 
   //Set the TE bit in UART CR1 to send and idle frame as first transmission
-  
+  uartaddress->CR1 |= (1 << 3);
 
-  //Write the data to send in the UART DR (which clears the TXE bit). - Will probably be moved to interrupt 
+  //Write the data to send in the UART DR (which clears the TXE bit). - Will probably be moved to interrupt
+
 
   //After writing the last data, wait until TC=1. this indicates the transmission of the last frame is complete. - Will probably be moved to interrupt
 
@@ -30,5 +37,9 @@ void uart_general_init(volatile UART_Struct * uartaddress) {
 }
 
 void UART4_IRQHandler(void) {
+  volatile uint16_t SR = USART2->SR;
 
+  if (SR & (1 << 7)) {
+    return;
+  }
 }

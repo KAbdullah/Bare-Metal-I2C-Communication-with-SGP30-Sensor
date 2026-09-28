@@ -31,16 +31,16 @@ GPIO_Types UsingI2C1 = {
   }
 };
 
-GPIO_Types UsingUART4 = {
+GPIO_Types UsingUSART2 = {
   {
     .address = GPIOA,
-    .pin1 = 0,
-    .pin2 = 1,
+    .pin1 = 2,
+    .pin2 = 3,
     .moder = 2,
     .otyper = 0,
     .ospeedr = 1,
     .pupdr = 1,
-    .afrl = 8
+    .afrl = 7
   }
 };
 

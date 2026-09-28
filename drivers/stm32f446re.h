@@ -52,6 +52,7 @@ typedef struct {
 
 #define I2C1 ((volatile I2C_Struct *) 0x40005400)
 
+#define USART2 ((volatile UART_Struct *) 0x40004400)
 #define UART4 ((volatile UART_Struct *) 0x40004C00)
 #define UART5 ((volatile UART_Struct *) 0x40005000)
 

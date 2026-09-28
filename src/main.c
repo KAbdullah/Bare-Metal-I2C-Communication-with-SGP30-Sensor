@@ -41,13 +41,13 @@ int main (void) {
   turn_on_gpioa();
 
   gpio_init(UsingI2C1);
-  gpio_init(UsingUART4);
+  gpio_init(UsingUSART2);
 
   turn_on_i2c1();
-  turn_on_uart4();
+  turn_on_usart2();
 
   i2c_init_and_start(I2C1);
-  uart_general_init(UART4);
+  uart_general_init(USART2);
 
 
   __asm("CPSIE i"); // Change Processor State to enable interrupt 
@@ -96,8 +96,7 @@ int main (void) {
     while (i2c_in_progress);
 
     //Pause for one second before starting again
-    delay(1000);
-
+    delay(1000);    
   }
 }
 
@@ -227,7 +226,7 @@ void I2C1_EV_IRQHandler (void) {
       //Set ACK to low
       I2C1->CR1 &= ~(1 << 10);
       //Read Data N-2
-      UART4->DR = I2C1->DR;
+      USART2->DR = I2C1->DR;
       if (logtrace_index< 10) log_trace[logtrace_index++] = 10;
       currDataReceptionNumber++;
     } else {
@@ -237,8 +236,9 @@ void I2C1_EV_IRQHandler (void) {
       I2C1->CR1 |= (1 << 9);
 
       //Pass the data to the UART - hmm, thinking about it, I definitely need a ring buffer
-      UART4->DR= I2C1->DR;
-      UART4->DR = I2C1->DR;
+      USART2->DR= I2C1->DR;
+      while (!(USART2->SR & (1 << 7)));
+      USART2->DR = I2C1->DR;
       
       currDataReceptionNumber = 0;
 

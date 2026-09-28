@@ -47,7 +47,7 @@ void turn_on_i2c1(void) {
   RCC_APB1ENR |= (1 << 21);
 }
 
-void turn_on_uart4(void) {
+void turn_on_usart2(void) {
   //Turn on UART4 clk
-  RCC_APB1ENR |= (1 << 19);
+  RCC_APB1ENR |= (1 << 17);
 }
