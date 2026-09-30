@@ -1,0 +1,4 @@
+build/
+sgp30-venv/
+./gdb_history
+.vscode/
